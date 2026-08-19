@@ -84,10 +84,10 @@ const createGroupChat = asyncHandler(async (req, res) => {
 
   var users = JSON.parse(req.body.users);
 
-  if (users.length < 2) {
+  if (users.length < 1) {
     return res
       .status(400)
-      .send("More than 2 users are required to form a group chat");
+      .send("Please select at least 1 other user to form a group chat");
   }
 
   users.push(req.user);
@@ -98,6 +98,7 @@ const createGroupChat = asyncHandler(async (req, res) => {
       users: users,
       isGroupChat: true,
       groupAdmin: req.user,
+      groupPic: req.body.pic || "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
     });
 
     const fullGroupChat = await Chat.findOne({ _id: groupChat._id })
@@ -193,6 +194,35 @@ const addToGroup = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Update Group Picture
+// @route   PUT /api/chat/group-pic
+// @access  Protected
+const updateGroupPic = asyncHandler(async (req, res) => {
+  const { chatId, pic } = req.body;
+
+  const chat = await Chat.findById(chatId);
+  if (!chat) {
+    res.status(404);
+    throw new Error("Chat Not Found");
+  }
+
+  // Only admin can update pic
+  if (chat.groupAdmin.toString() !== req.user._id.toString()) {
+    res.status(401);
+    throw new Error("Only admins can change the group picture");
+  }
+
+  const updatedChat = await Chat.findByIdAndUpdate(
+    chatId,
+    { groupPic: pic },
+    { new: true }
+  )
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
+
+  res.json(updatedChat);
+});
+
 module.exports = {
   accessChat,
   fetchChats,
@@ -200,4 +230,5 @@ module.exports = {
   renameGroup,
   addToGroup,
   removeFromGroup,
+  updateGroupPic,
 };

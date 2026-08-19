@@ -82,4 +82,33 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { allUsers, registerUser, authUser };
+//@description     Update user profile picture
+//@route           PUT /api/user/profile
+//@access          Protected
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    user.pic = req.body.pic || user.pic;
+    // optionally allow updating name
+    if (req.body.name) {
+      user.name = req.body.name;
+    }
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      pic: updatedUser.pic,
+      token: generateToken(updatedUser._id),
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+module.exports = { allUsers, registerUser, authUser, updateUserProfile };
