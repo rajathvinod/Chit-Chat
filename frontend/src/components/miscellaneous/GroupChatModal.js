@@ -129,34 +129,53 @@ const GroupChatModal = ({ children }) => {
     <>
       <span onClick={onOpen}>{children}</span>
 
-      <Modal onClose={onClose} isOpen={isOpen} isCentered>
-        <ModalOverlay />
-        <ModalContent>
+      <Modal onClose={onClose} isOpen={isOpen} isCentered size="md">
+        <ModalOverlay backdropFilter="blur(5px)" />
+        <ModalContent borderRadius="2xl" p={2}>
           <ModalHeader
-            fontSize="35px"
-            fontFamily="Work sans"
-            d="flex"
+            fontSize="24px"
+            fontFamily="Outfit"
+            fontWeight="bold"
+            display="flex"
             justifyContent="center"
+            color="#1a202c"
           >
             Create Group Chat
           </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody d="flex" flexDir="column" alignItems="center">
+          <ModalCloseButton mt={3} />
+          <ModalBody display="flex" flexDir="column" alignItems="center">
             <FormControl>
               <Input
-                placeholder="Chat Name"
+                placeholder="Group Chat Name"
                 mb={3}
                 onChange={(e) => setGroupChatName(e.target.value)}
+                bg="#f7fafc"
+                border="none"
+                borderRadius="full"
+                _focus={{ bg: "#edf2f7" }}
+                px={4}
               />
             </FormControl>
             <FormControl>
               <Input
-                placeholder="Add Users eg: John, Piyush, Jane"
-                mb={1}
+                placeholder="Add Users (e.g. John, Jane)"
+                mb={3}
                 onChange={(e) => handleSearch(e.target.value)}
+                bg="#f7fafc"
+                border="none"
+                borderRadius="full"
+                _focus={{ bg: "#edf2f7" }}
+                px={4}
               />
             </FormControl>
-            <Box w="100%" d="flex" flexWrap="wrap">
+            <Box w="100%" display="flex" flexWrap="wrap" mb={2}>
+              {/* Always show the logged-in user as the Admin */}
+              <UserBadgeItem
+                key={user._id}
+                user={user}
+                admin={user._id}
+                handleFunction={() => {}} // Can't delete self
+              />
               {selectedUsers.map((u) => (
                 <UserBadgeItem
                   key={u._id}
@@ -181,7 +200,15 @@ const GroupChatModal = ({ children }) => {
             )}
           </ModalBody>
           <ModalFooter>
-            <Button onClick={handleSubmit} colorScheme="blue">
+            <Button 
+              onClick={handleSubmit} 
+              w="100%"
+              borderRadius="full"
+              bg="#1a202c"
+              color="white"
+              _hover={{ bg: "#2d3748" }}
+              py={6}
+            >
               Create Chat
             </Button>
           </ModalFooter>

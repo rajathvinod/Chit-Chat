@@ -1,22 +1,35 @@
-@import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap");
 
 .App {
   min-height: 100vh;
   display: flex;
-  background-image: url("./background.png");
-  background-position: center;
-  background-size: cover;
+  background-color: #f4f5f7;
+}
+
+.glass-panel {
+  background: white !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.05) !important;
+  color: #1a202c !important;
+}
+
+.glass-panel-light {
+  background: white !important;
+  border: 1px solid #edf2f7 !important;
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.03) !important;
+  color: #2d3748 !important;
 }
 
 ::-webkit-scrollbar {
-  width: 0px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(136, 136, 136, 0.281);
+  background: #cbd5e0;
+  border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #a0aec0;
 }
