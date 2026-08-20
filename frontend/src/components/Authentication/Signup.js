@@ -58,7 +58,7 @@ const Signup = () => {
       const config = { headers: { "Content-type": "application/json" } };
       const { data } = await axios.post(
         "/api/user",
-        { name, email, password, pic: selectedPicture ? "" : pic },
+        { name, email, password, ...(pic && !selectedPicture ? { pic } : {}) },
         config,
       );
 
